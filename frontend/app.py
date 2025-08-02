@@ -5,8 +5,7 @@ import base64
 app = Flask(__name__)
 
 # FastAPI backend URL
-BACKEND_URL = "http://backend:8000/predict/"  # Docker service name
-
+BACKEND_URL = "https://deepfake-detector-bpvl.onrender.com"  
 @app.route("/", methods=["GET", "POST"])
 def index():
     result = None

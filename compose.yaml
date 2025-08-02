@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend  # FastAPI backend folder
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app  # Mount the backend folder for live updates
+    environment:
+      - CUDA_VISIBLE_DEVICES=-1  # Force CPU usage
+      - TF_ENABLE_ONEDNN_OPTS=0
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend  # Flask frontend folder
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./frontend:/app  # Mount the frontend folder for live updates
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

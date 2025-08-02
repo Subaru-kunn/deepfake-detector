@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 import os
-from tensorflow.keras.models import load_model  # Import the load_model function
+from tensorflow.keras.models import load_model  
 
 # Force CPU usage
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
@@ -13,9 +13,8 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 app = FastAPI()
 
-# Load the model (from .h5 file)
 try:
-    model = load_model("deepfake_model.h5")  # Load the .h5 model instead of pickle file
+    model = load_model("deepfake_model.h5") # Loading model
     print("Model loaded successfully")
 except Exception as e:
     print(f"Model loading failed: {str(e)}")
@@ -33,10 +32,10 @@ async def predict(image_request: ImageRequest):
         image = image.resize((180, 180))
         image = np.array(image)
 
-        # Add batch dimension
+        # Adding batch dimension
         image = np.expand_dims(image, axis=0)
 
-        # Validate shape (1, 180, 180, 3)
+        # Validating shape to (1, 180, 180, 3)
         if image.shape != (1, 180, 180, 3):
             raise HTTPException(status_code=400, detail=f"Invalid image shape: {image.shape}")
 

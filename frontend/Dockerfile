@@ -1,4 +1,3 @@
-# Use Python base image
 FROM python:3.11
 
 # Set working directory

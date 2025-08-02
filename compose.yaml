@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app  # Mount the backend folder for live updates
+      - ./backend:/app  # backend folder for live updates
     environment:
       - CUDA_VISIBLE_DEVICES=-1  # Force CPU usage
       - TF_ENABLE_ONEDNN_OPTS=0
@@ -20,7 +20,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./frontend:/app  # Mount the frontend folder for live updates
+      - ./frontend:/app  # frontend folder for live updates
     depends_on:
       - backend
     networks:

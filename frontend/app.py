@@ -16,7 +16,7 @@ def index():
         file = request.files.get("file")
 
         if file:
-            # Read the image and encode it in Base64
+            # Reading the image and encoding it in Base64
             image_bytes = file.read()
             image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 

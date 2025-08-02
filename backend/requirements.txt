@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-keras
-tensorflow
-numpy
-pandas
-pillow
-scikit-learn  # Needed for pickle-serialized ML models

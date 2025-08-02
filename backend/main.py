@@ -1,11 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import pickle
 import base64
 import numpy as np
 from PIL import Image
 from io import BytesIO
 import os
+from tensorflow.keras.models import load_model  # Import the load_model function
 
 # Force CPU usage
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
@@ -13,10 +13,9 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 app = FastAPI()
 
-# Load the model
+# Load the model (from .h5 file)
 try:
-    with open("model_f_real_pickle_final.pkl", "rb") as f:
-        model = pickle.load(f)
+    model = load_model("deepfake_model.h5")  # Load the .h5 model instead of pickle file
     print("Model loaded successfully")
 except Exception as e:
     print(f"Model loading failed: {str(e)}")

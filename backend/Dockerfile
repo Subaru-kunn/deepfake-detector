@@ -1,9 +1,12 @@
 # Use an official Python image
 FROM python:3.11-slim
 
+ENV CUDA_VISIBLE_DEVICES=-1
+ENV TF_ENABLE_ONEDNN_OPTS=0
+
 # Set working directory
 WORKDIR /app
-# Dockerfile (backend)
+
 ENV CUDA_VISIBLE_DEVICES=-1
 ENV TF_ENABLE_ONEDNN_OPTS=0
 

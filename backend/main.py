@@ -15,7 +15,7 @@ app = FastAPI()
 
 # Load the model (from .h5 file)
 try:
-    model = load_model("deepfake_model.h5")  # Load the .h5 model instead of pickle file
+    model = load_model("deepfake_model.h5") 
     print("Model loaded successfully")
 except Exception as e:
     print(f"Model loading failed: {str(e)}")

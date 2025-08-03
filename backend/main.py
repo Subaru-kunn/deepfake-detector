@@ -41,7 +41,8 @@ async def predict(image_request: ImageRequest):
 
         # Predict
         prediction = model.predict(image)[0]
-        return {"result": "Real" if prediction == 1 else "Fake"}
+        predicted_class = "Fake" if prediction >= 0.5 else "Real"
+        return {"result": predicted_class}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

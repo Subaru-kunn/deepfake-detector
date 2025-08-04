@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import requests
 import base64
+import os
 
 app = Flask(__name__)
 

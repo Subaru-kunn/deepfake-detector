@@ -4,5 +4,6 @@ keras
 tensorflow
 numpy
 pandas
+slowapi
 pillow
 scikit-learn  # Needed for pickle-serialized ML models

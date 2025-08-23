@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 import base64
 import numpy as np
@@ -7,25 +7,55 @@ from io import BytesIO
 import os
 from tensorflow.keras.models import load_model  
 
+# --------------------
+# Rate Limiter Imports
+# --------------------
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from fastapi.responses import JSONResponse
+
 # Force CPU usage
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 app = FastAPI()
 
+# --------------------
+# Setup Rate Limiter
+# --------------------
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+
+@app.exception_handler(RateLimitExceeded)
+def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(status_code=429, content={"error": "Too Many Requests"})
+
+
+# --------------------
+# Load Model
+# --------------------
 try:
-    model = load_model("deepfake_model.h5") # Loading model
+    model = load_model("deepfake_model.h5")  # Loading model
     print("Model loaded successfully")
 except Exception as e:
     print(f"Model loading failed: {str(e)}")
     raise HTTPException(status_code=500, detail=f"Model loading failed: {str(e)}")
 
 
+# --------------------
+# Request Model
+# --------------------
 class ImageRequest(BaseModel):
     image: str
 
+
+# --------------------
+# Predict Endpoint
+# --------------------
 @app.post("/predict/")
-async def predict(image_request: ImageRequest):
+@limiter.limit("5/minute")  # Allow max 5 requests per minute per IP
+async def predict(request: Request, image_request: ImageRequest):
     try:
         # Decode and resize to 180x180 (match training)
         image_data = base64.b64decode(image_request.image)
@@ -36,7 +66,7 @@ async def predict(image_request: ImageRequest):
         # Adding batch dimension
         image = np.expand_dims(image, axis=0)
 
-        # Validating shape to (1, 180, 180, 3)
+        # Validating shape
         if image.shape != (1, 180, 180, 3):
             raise HTTPException(status_code=400, detail=f"Invalid image shape: {image.shape}")
 
@@ -47,4 +77,3 @@ async def predict(image_request: ImageRequest):
 
     except Exception as e:
         return {"error": str(e)}
-        #raise HTTPException(status_code=500, detail=str(e))

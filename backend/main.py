@@ -18,7 +18,7 @@ try:
     print("Model loaded successfully")
 except Exception as e:
     print(f"Model loading failed: {str(e)}")
-    return {"error": str(e)}
+    raise HTTPException(status_code=500, detail=f"Model loading failed: {str(e)}")
 
 
 class ImageRequest(BaseModel):
@@ -46,4 +46,5 @@ async def predict(image_request: ImageRequest):
         return {"result": predicted_class}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return {"error": str(e)}
+        #raise HTTPException(status_code=500, detail=str(e))

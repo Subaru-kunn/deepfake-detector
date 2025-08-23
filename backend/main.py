@@ -18,12 +18,13 @@ try:
     print("Model loaded successfully")
 except Exception as e:
     print(f"Model loading failed: {str(e)}")
-    raise HTTPException(status_code=500, detail=f"Model loading failed: {str(e)}")
+    return {"error": str(e)}
+
 
 class ImageRequest(BaseModel):
     image: str
 
-@app.post("/predict/")
+@app.post("/")
 async def predict(image_request: ImageRequest):
     try:
         # Decode and resize to 180x180 (match training)

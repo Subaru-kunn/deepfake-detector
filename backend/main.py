@@ -24,7 +24,7 @@ except Exception as e:
 class ImageRequest(BaseModel):
     image: str
 
-@app.post("/")
+@app.post("/predict/")
 async def predict(image_request: ImageRequest):
     try:
         # Decode and resize to 180x180 (match training)

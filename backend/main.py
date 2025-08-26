@@ -84,7 +84,7 @@ async def predict(request: Request, image_request: ImageRequest):
 # --------------------
 from fastapi import Response
 
-@app.api_route("/health", methods=["GET", "HEAD"])
+@app.api_route("/", methods=["GET", "HEAD"])
 async def health_check():
     # Return 200 OK for both GET and HEAD
     return {"status": "ok"}

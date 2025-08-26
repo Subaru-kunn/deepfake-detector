@@ -77,3 +77,11 @@ async def predict(request: Request, image_request: ImageRequest):
 
     except Exception as e:
         return {"error": str(e)}
+
+
+# --------------------
+# Health Check Endpoint
+# --------------------
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
